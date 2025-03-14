@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import RecommendationComponent from '../components/Recommendations';
+import NavBar from '../components/NavBar';
 
 const HomeScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -9,7 +10,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.safeView}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.headerText}>Find, Book & Get Styled by Top Tailors!</Text>
+        <NavBar/>
         <SearchBar 
           value={searchQuery} 
           onChangeText={setSearchQuery} 

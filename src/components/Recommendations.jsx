@@ -1,59 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 const RecommendationComponent = () => {
   // Static JSON data
-  const recommendations = [
+  const tailors = [
     {
-      title: 'Roof Flashing Repair',
-      price: 500,
-      description: 'Chimneys, and skylights',
-      duration: '2 - 4 hours',
-      image: 'https://images.pexels.com/photos/4452379/pexels-photo-4452379.jpeg?auto=compress&cs=tinysrgb&w=600',
+      name: 'Rajesh Tailors',
+      specialization: 'Bespoke Suits & Sherwanis',
+      location: 'Mumbai, India',
+      image: 'https://images.pexels.com/photos/3755706/pexels-photo-3755706.jpeg?auto=compress&cs=tinysrgb&w=600',
     },
     {
-      title: 'Leak Repair',
-      price: 350,
-      description: 'Fixing minor leaks',
-      duration: '1 - 3 hours',
-      image: 'https://images.pexels.com/photos/4452388/pexels-photo-4452388.jpeg?auto=compress&cs=tinysrgb&w=600',
+      name: 'Elegant Stitches',
+      specialization: 'Women’s Ethnic Wear',
+      location: 'Delhi, India',
+      image: 'https://images.pexels.com/photos/6205514/pexels-photo-6205514.jpeg?auto=compress&cs=tinysrgb&w=600',
     },
     {
-      title: 'Waterproofing',
-      price: 700,
-      description: 'Full home waterproofing',
-      duration: '4 - 6 hours',
-      image: 'https://images.pexels.com/photos/26150470/pexels-photo-26150470/free-photo-of-brunette-man-posing-wearing-black-suit-jacket-and-white-shirt-with-arms-crossed.jpeg?auto=compress&cs=tinysrgb&w=600',
+      name: 'Modern Fit Tailors',
+      specialization: 'Men’s Formal & Wedding Wear',
+      location: 'Bangalore, India',
+      image: 'https://images.pexels.com/photos/6610994/pexels-photo-6610994.jpeg?auto=compress&cs=tinysrgb&w=600',
+    },
+    {
+      name: 'Classic Stitch',
+      specialization: 'Casual & Daily Wear',
+      location: 'Kolkata, India',
+      image: 'https://images.pexels.com/photos/6205517/pexels-photo-6205517.jpeg?auto=compress&cs=tinysrgb&w=600',
+    },
+    {
+      name: 'Heritage Handloom',
+      specialization: 'Handcrafted & Traditional Wear',
+      location: 'Jaipur, India',
+      image: 'https://images.pexels.com/photos/6205520/pexels-photo-6205520.jpeg?auto=compress&cs=tinysrgb&w=600',
     },
   ];
+
+  const categories = ["Both", "Men's Wear", "Women's Wear"];
+  const [selectedCategory, setSelectedCategory] = useState("Both");
 
   return (
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <Text style={styles.title}>Most Popular Services</Text>
-        <TouchableOpacity>
-          <Text style={styles.seeAll}>See all</Text>
-        </TouchableOpacity>
+        <Text style={styles.title}>Tailors Near You</Text>
+        <View style={styles.underline} />
       </View>
 
       {/* Scrollable Categories */}
       <FlatList
-        data={['Full Roof Inspection', 'Leak Repairs', 'Waterproofing']}
+        data={categories}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.category}>
-            <Text style={styles.categoryText}>{item}</Text>
+          <TouchableOpacity
+            style={[
+              styles.category,
+              selectedCategory === item && styles.selectedCategory,
+            ]}
+            onPress={() => setSelectedCategory(item)}
+          >
+            <Text
+              style={[
+                styles.categoryText,
+                selectedCategory === item && styles.selectedCategoryText,
+              ]}
+            >
+              {item}
+            </Text>
           </TouchableOpacity>
         )}
-        contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 5 }} // Added spacing
+        contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 5 }}
       />
 
-      {/* Services List */}
+      {/* Tailors List */}
       <FlatList
-        data={recommendations}
+        data={tailors}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
@@ -61,14 +84,18 @@ const RecommendationComponent = () => {
           <View style={styles.card}>
             <Image source={{ uri: item.image }} style={styles.image} />
             <View style={styles.cardContent}>
-              <Text style={styles.serviceTitle}>{item.title}</Text>
-              <Text style={styles.price}>${item.price}</Text>
-              <Text style={styles.description}>{item.description}</Text>
-              <Text style={styles.time}>{item.duration}</Text>
+              <Text style={styles.serviceTitle}>{item.name}</Text>
+              <Text style={styles.specialization}>{item.specialization}</Text>
+              <View style={styles.locationRow}>
+                <Text style={styles.location}>{item.location}</Text>
+                <TouchableOpacity style={styles.button}>
+                  <Text style={styles.buttonText}>View Profile</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         )}
-        contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 10 }} // Added spacing
+        contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 10 }}
       />
     </View>
   );
@@ -79,20 +106,20 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 20,
-    alignItems: 'center',
-    marginBottom: 10,
+    paddingHorizontal: 10,
+    marginBottom: 15,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#222',
   },
-  seeAll: {
-    fontSize: 14,
-    color: '#007AFF',
+  underline: {
+    width: 50,
+    height: 3,
+    backgroundColor: '#007AFF',
+    marginTop: 5,
+    borderRadius: 2,
   },
   category: {
     backgroundColor: '#F2F2F2',
@@ -101,48 +128,73 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginHorizontal: 5,
   },
+  selectedCategory: {
+    backgroundColor: '#007AFF',
+  },
   categoryText: {
     fontSize: 14,
     color: '#555',
   },
+  selectedCategoryText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   card: {
     backgroundColor: '#fff',
     borderRadius: 15,
-    marginHorizontal: 12,
+    marginHorizontal: 8,
     width: 280,
     overflow: 'hidden',
     elevation: 4,
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   image: {
     width: '100%',
-    height: 160,
+    height: 180,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
   cardContent: {
-    padding: 12,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
   },
   serviceTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#222',
-    marginBottom: 4,
+    marginBottom: 6,
   },
-  price: {
+  specialization: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#007AFF',
-    marginVertical: 6,
+    color: '#4C6EF5',
+    marginBottom: 10,
   },
-  description: {
+  locationRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  location: {
     fontSize: 13,
-    color: '#555',
-  },
-  time: {
-    fontSize: 12,
     color: '#777',
-    marginTop: 6,
+    flex: 1,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });
 
