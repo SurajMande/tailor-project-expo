@@ -1,9 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { View, Text, TextInput, TouchableOpacity, ImageBackground, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 const Login = () => {
+
+  const navigation = useNavigation();
+
   return (
     <ImageBackground
       source={{
@@ -45,7 +49,7 @@ const Login = () => {
 
       {/* Signup Option */}
       <Text style={styles.signupText}>
-        Don't have an account? <Text style={styles.signupLink}>Sign Up</Text>
+        Don't have an account? <Text style={styles.signupLink} onPress={()=> navigation.navigate('SignUp')}>Sign Up</Text>
       </Text>
     </ImageBackground>
   );

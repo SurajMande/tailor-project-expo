@@ -7,8 +7,10 @@ import Icon from "react-native-vector-icons/Feather";
 // Import screens
 import HomeScreen from "./src/screens/HomeScreen";
 import TailorManagement from "./src/screens/TailorManagement";
+import TailorProfile from "./src/screens/TailorProfile";
 import Login from "./src/components/Login";
 import BusinessCard from "./src/components/BusinessCard";
+import SignUp from "./src/components/SignUp";
 
 // Create Stack Navigator
 const Stack = createStackNavigator();
@@ -53,7 +55,9 @@ export default function App() {
       >
         <Stack.Screen name="MainTabs" component={BottomTabs} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="BusinessCard" component={BusinessCard} />
+        <Stack.Screen name="TailorProfile" component={TailorProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 
 const RecommendationComponent = () => {
   // Static JSON data
@@ -35,6 +36,8 @@ const RecommendationComponent = () => {
       image: 'https://images.pexels.com/photos/6205520/pexels-photo-6205520.jpeg?auto=compress&cs=tinysrgb&w=600',
     },
   ];
+
+  const navigation = useNavigation();
 
   const categories = ["Both", "Men's Wear", "Women's Wear"];
   const [selectedCategory, setSelectedCategory] = useState("Both");
@@ -81,14 +84,14 @@ const RecommendationComponent = () => {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <View style={styles.card} >
             <Image source={{ uri: item.image }} style={styles.image} />
             <View style={styles.cardContent}>
               <Text style={styles.serviceTitle}>{item.name}</Text>
               <Text style={styles.specialization}>{item.specialization}</Text>
               <View style={styles.locationRow}>
                 <Text style={styles.location}>{item.location}</Text>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('TailorProfile')}>
                   <Text style={styles.buttonText}>View Profile</Text>
                 </TouchableOpacity>
               </View>
