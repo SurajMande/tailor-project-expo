@@ -1,56 +1,74 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, ImageBackground, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ImageBackground,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 const Login = () => {
-
-  const navigation = useNavigation();
-
   return (
     <ImageBackground
       source={{
-        uri: encodeURI("https://images.pexels.com/photos/3738101/pexels-photo-3738101.jpeg?auto=compress&cs=tinysrgb&w=600"),
+        uri: "https://images.pexels.com/photos/3738101/pexels-photo-3738101.jpeg?auto=compress&cs=tinysrgb&w=600",
       }}
       style={styles.background}
     >
       <View style={styles.overlay} />
 
-      <Text style={styles.welcomeText}>Welcome Back !</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <Text style={styles.title}>Create Your Account</Text>
 
-      {/* Email Input */}
-      <View style={styles.inputContainer}>
-        <TextInput style={styles.input} placeholder="Email" placeholderTextColor="gray" />
-        <MaterialIcon name="email" size={20} color="gray" style={styles.inputIcon} />
-      </View>
-
-      {/* Password Input */}
-      <View style={styles.inputContainer}>
-        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="gray" secureTextEntry />
-        <Icon name="key" size={18} color="gray" style={styles.inputIcon} />
-      </View>
-
-      {/* Remember Me & Forgot Password
-      <View style={styles.optionsContainer}>
-        <View style={styles.checkboxContainer}>
-          <TouchableOpacity style={styles.checkbox} />
-          <Text style={styles.rememberText}>Remember for 30 days</Text>
+        {/* Email Input */}
+        <View style={styles.inputContainer}>
+          <MaterialIcon name="email" size={20} color="gray" style={styles.inputIcon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your email"
+            placeholderTextColor="gray"
+            keyboardType="email-address"
+          />
         </View>
-        <TouchableOpacity>
-          <Text style={styles.forgotText}>Forgot password?</Text>
+
+        {/* Password Input */}
+        <View style={styles.inputContainer}>
+          <Icon name="lock" size={18} color="gray" style={styles.inputIcon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your password"
+            placeholderTextColor="gray"
+            secureTextEntry
+          />
+        </View>
+
+        {/* Sign Up Button */}
+        <TouchableOpacity style={styles.signupButton}>
+          <Text style={styles.signupText}>Sign Up</Text>
         </TouchableOpacity>
-      </View> */}
 
-      {/* Login Button */}
-      <TouchableOpacity style={styles.loginButton}>
-        <Text style={styles.loginText}>Log In</Text>
-      </TouchableOpacity>
+        {/* OR Separator */}
+        <Text style={styles.orText}>Or</Text>
 
-      {/* Signup Option */}
-      <Text style={styles.signupText}>
-        Don't have an account? <Text style={styles.signupLink} onPress={()=> navigation.navigate('SignUp')}>Sign Up</Text>
-      </Text>
+        {/* Google Login Button */}
+        <TouchableOpacity style={styles.googleButton}>
+          <Icon name="google" size={18} color="#DB4437" style={styles.googleIcon} />
+          <Text style={styles.googleText}>Log In with Google</Text>
+        </TouchableOpacity>
+
+        {/* Already have an account? */}
+        <Text style={styles.loginText}>
+          Already have an account? <Text style={styles.loginLink}>Log In</Text>
+        </Text>
+      </KeyboardAvoidingView>
     </ImageBackground>
   );
 };
@@ -58,85 +76,89 @@ const Login = () => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     width: "100%",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark overlay effect
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
   },
-  welcomeText: {
-    fontSize: 25,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    marginTop: "50%",
+    paddingTop: 30,
+    width: "100%",
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 22,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
     marginBottom: 20,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "black",
+    backgroundColor: "#F5F5F5",
     borderRadius: 25,
     paddingHorizontal: 20,
-    width: "80%",
+    width: "90%",
     marginBottom: 15,
   },
   input: {
     flex: 1,
     fontSize: 16,
-    color: "white",
+    color: "black",
     paddingVertical: 15,
   },
   inputIcon: {
-    position: "absolute",
-    right: 15,
+    marginRight: 10,
   },
-  optionsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "80%",
-    marginBottom: 15,
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  checkbox: {
-    width: 15,
-    height: 15,
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 3,
-    marginRight: 5,
-  },
-  rememberText: {
-    color: "white",
-    fontSize: 14,
-  },
-  forgotText: {
-    color: "white",
-    fontSize: 14,
-    textDecorationLine: "underline",
-  },
-  loginButton: {
-    width: "80%",
+  signupButton: {
+    width: "90%",
     borderRadius: 25,
-    backgroundColor: "#6959CD", 
+    backgroundColor: "#007BFF",
     alignItems: "center",
     paddingVertical: 12,
-    marginBottom: 15,
+    marginTop: 10,
   },
-  loginText: {
+  signupText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },
-  signupText: {
-    color: "white",
-    fontSize: 14,
+  orText: {
+    marginVertical: 15,
+    color: "gray",
   },
-  signupLink: {
+  googleButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "90%",
+    borderRadius: 25,
+    backgroundColor: "#F5F5F5",
+    paddingVertical: 12,
+    justifyContent: "center",
+  },
+  googleIcon: {
+    marginRight: 10,
+  },
+  googleText: {
+    fontSize: 16,
+    color: "black",
+  },
+  loginText: {
+    color: "black",
+    fontSize: 14,
+    marginTop: 15,
+  },
+  loginLink: {
     fontWeight: "bold",
+    color: "#007BFF",
     textDecorationLine: "underline",
   },
 });

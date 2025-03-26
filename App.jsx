@@ -75,6 +75,7 @@ export default function App() {
         <Stack.Screen name="TailorProfile" component={TailorProfile} />
         <Stack.Screen name="BusinessCard" component={BusinessCard} />
         <Stack.Screen name="SearchResults" component={SearchResults} />
+        <Stack.Screen name="TailorProfileDetails" component={TailorProfileDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

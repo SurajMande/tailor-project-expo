@@ -25,9 +25,9 @@ const NavBar = () => {
 
       {/* Right Section - Three-Line Menu */}
       <TouchableOpacity 
-      onPress={()=> navigation.navigate('BusinessCard')}
+      onPress={()=> navigation.navigate('SignUp')}
       >
-        <MenuIcon name="menu" size={28} color="black" />
+        <MenuIcon name="bell" size={28} color="black" />
       </TouchableOpacity>
     </View>
   );

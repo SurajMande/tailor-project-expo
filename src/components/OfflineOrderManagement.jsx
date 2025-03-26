@@ -8,6 +8,8 @@ import {
   Modal,
   Alert,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
@@ -17,7 +19,6 @@ const OfflineOrderManagement = () => {
   const [orders, setOrders] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
 
   const [newOrder, setNewOrder] = useState({
     customerName: "",
@@ -34,7 +35,7 @@ const OfflineOrderManagement = () => {
   // Add new order
   const handleAddOrder = () => {
     if (!newOrder.customerName || !newOrder.phoneNumber || !newOrder.itemName || !newOrder.deliveryDate) {
-      Alert.alert("Error", "Please fill all required fields!");
+      Alert.alert("Missing Fields", "All fields are required.", [{ text: "OK" }]);
       return;
     }
     setOrders([...orders, newOrder]);
@@ -48,7 +49,6 @@ const OfflineOrderManagement = () => {
 
   // Handle date selection
   const handleConfirm = (date) => {
-    setSelectedDate(date);
     handleChange("deliveryDate", moment(date).format("DD/MM/YYYY"));
     hideDatePicker();
   };
@@ -81,50 +81,52 @@ const OfflineOrderManagement = () => {
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <ScrollView>
-              <Text style={styles.modalTitle}>Add New Order</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Customer Name"
-                value={newOrder.customerName}
-                onChangeText={(text) => handleChange("customerName", text)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Phone Number"
-                keyboardType="phone-pad"
-                value={newOrder.phoneNumber}
-                onChangeText={(text) => handleChange("phoneNumber", text)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Item Name"
-                value={newOrder.itemName}
-                onChangeText={(text) => handleChange("itemName", text)}
-              />
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+              <ScrollView>
+                <Text style={styles.modalTitle}>Add New Order</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Customer Name"
+                  value={newOrder.customerName}
+                  onChangeText={(text) => handleChange("customerName", text)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Phone Number"
+                  keyboardType="phone-pad"
+                  value={newOrder.phoneNumber}
+                  onChangeText={(text) => handleChange("phoneNumber", text)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Item Name"
+                  value={newOrder.itemName}
+                  onChangeText={(text) => handleChange("itemName", text)}
+                />
 
-              <TouchableOpacity style={styles.dateButton} onPress={showDatePicker}>
-                <Text style={styles.dateButtonText}>
-                  {newOrder.deliveryDate || "Select Delivery Date"}
-                </Text>
-              </TouchableOpacity>
-
-              <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-              />
-
-              <View style={styles.modalButtons}>
-                <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-                  <Text style={styles.buttonText}>Cancel</Text>
+                <TouchableOpacity style={styles.dateButton} onPress={showDatePicker}>
+                  <Text style={styles.dateButtonText}>
+                    {newOrder.deliveryDate || "Select Delivery Date"}
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.confirmButton} onPress={handleAddOrder}>
-                  <Text style={styles.buttonText}>Confirm</Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
+
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                />
+
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.confirmButton} onPress={handleAddOrder}>
+                    <Text style={styles.buttonText}>Confirm</Text>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </View>
         </View>
       </Modal>
