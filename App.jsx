@@ -1,21 +1,23 @@
 import React from "react";
-import { View, Text, Platform } from "react-native";
+import { View,} from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons"; // Using Ionicons for better icons
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
 
 // Import screens
 import HomeScreen from "./src/screens/HomeScreen";
 import TailorManagement from "./src/screens/TailorManagement";
+import CustomerManagement from "./src/screens/CustomerManagement";
 import TailorProfile from "./src/screens/TailorProfile";
 import Login from "./src/components/Login";
 import SignUp from "./src/components/SignUp";
 import BusinessCard from "./src/components/BusinessCard";
 import TailorProfileDetails from "./src/components/TailorProfileDetails";
+// import OfflineOrderManagement from "./src/components/OfflineOrderManagement";
 import SearchResults from "./src/components/SearchResults";
+import AppointmentsPage from "./src/components/AppointmentPage";
 
 // Create Stack Navigator
 const Stack = createStackNavigator();
@@ -59,7 +61,8 @@ function BottomTabs() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="TailorManagement" component={TailorManagement} />
-      <Tab.Screen name="Account" component={Login} />
+      <Tab.Screen name="Account" component={TailorProfileDetails} />
+      {/* <Tab.Screen name="Account" component={OfflineOrderManagement} /> */}
     </Tab.Navigator>
   );
 }
@@ -76,6 +79,10 @@ export default function App() {
         <Stack.Screen name="BusinessCard" component={BusinessCard} />
         <Stack.Screen name="SearchResults" component={SearchResults} />
         <Stack.Screen name="TailorProfileDetails" component={TailorProfileDetails} />
+        <Stack.Screen name="TailorManagement" component={TailorManagement} />
+        <Stack.Screen name="CustomerManagement" component={CustomerManagement} />
+        <Stack.Screen name="AppointmentsPage" component={AppointmentsPage} />
+        {/* <Stack.Screen name="OfflineOrderManagement" component={OfflineOrderManagement} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -4,6 +4,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
+import Header from "./Header";
 
 const BusinessCard = () => {
   const navigation = useNavigation(); // Get navigation instance
@@ -34,16 +35,14 @@ const BusinessCard = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header with Back Button */}
-      <View style={styles.headerBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-left" size={20} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Business Card</Text>
-      </View>
+      <Header 
+      navigation={navigation} 
+      name="Business Card"
+      />
 
       <View style={styles.card}>
         {/* Profile Section */}
-        <View style={styles.header}>
+        <View style={styles.cardHeader}>
           <View style={styles.profileImage} />
           <View style={styles.profileInfo}>
             <Text style={styles.name}>{businessData.name}</Text>
@@ -94,31 +93,16 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f5f5f5",
-    paddingVertical: 20
-  },
-  headerBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 15,
-  },
-  backButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    color: "black",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 15,
   },
   card: {
     backgroundColor: "#fff",
     borderRadius: 10,
     margin: 20,
+    marginTop:30,
     overflow: "hidden",
     elevation: 5,
   },
-  header: {
+  cardHeader: {
     backgroundColor: "#673AB7",
     padding: 20,
     flexDirection: "row",

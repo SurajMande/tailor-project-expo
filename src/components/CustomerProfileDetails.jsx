@@ -2,26 +2,18 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import ProfileDetails from "./ProfileDetails";
 
-const TailorProfileDetails = () => {
+const CustomerProfileDetails = () => {
   const navigation = useNavigation();
   const [userData, setUserData] = useState({
-    fullName: "James Martin",
-    email: "james012@gmail.com",
-    phoneNumber: "1234567891",
-    businessName: "Martin Tailors",
-    location: "New York, USA",
-    specialization: "Men's Wear",
-    experience: "5 Years",
-    description: "Expert in custom-made suits and alterations.",
+    fullName: "John Doe",
+    email: "john.doe@email.com",
+    phoneNumber: "9876543210",
   });
 
   const fields = [
     { icon: "person", field: "fullName", label: "Full Name" },
     { icon: "email", field: "email", label: "Email" },
     { icon: "phone", field: "phoneNumber", label: "Phone Number" },
-    { icon: "store", field: "businessName", label: "Business Name" },
-    { icon: "location-on", field: "location", label: "Location" },
-    { icon: "description", field: "description", label: "Description" },
   ];
 
   return (
@@ -29,10 +21,10 @@ const TailorProfileDetails = () => {
       navigation={navigation}
       userData={userData}
       setUserData={setUserData}
-      profileType="Tailor"
+      profileType="Customer"
       fields={fields}
     />
   );
 };
 
-export default TailorProfileDetails;
+export default CustomerProfileDetails;

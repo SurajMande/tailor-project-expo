@@ -19,13 +19,11 @@ const NavBar = () => {
           <Text style={styles.locationText}> New York, USA</Text>
           <DropdownIcon name="chevron-down" size={22} color="black" style={styles.dropdownIcon} />
         </View>
-        {/* Underline */}
-        <View style={styles.underline} />
       </TouchableOpacity>
 
       {/* Right Section - Three-Line Menu */}
       <TouchableOpacity 
-      onPress={()=> navigation.navigate('SignUp')}
+      onPress={()=> navigation.navigate('AppointmentsPage')}
       >
         <MenuIcon name="bell" size={28} color="black" />
       </TouchableOpacity>
