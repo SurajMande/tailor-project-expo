@@ -1,6 +1,8 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Header from "./Header";
 
 const appointments = [
   { id: "1", customer: "John Doe", date: "2025-04-05", time: "10:30 AM", status: "Confirmed" },
@@ -9,40 +11,34 @@ const appointments = [
 ];
 
 const AppointmentsPage = () => {
+
+  const navigation = useNavigation()
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Appointments</Text>
+
+      <Header
+      navigation={navigation}
+      name= "Your Appointments"
+      />
+
       <FlatList
         data={appointments}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Text style={styles.customer}>{item.customer}</Text>
+            <View style={styles.cardHeader}>
+              <Text style={styles.customer}>{item.customer}</Text>
+              <Text style={[styles.status, styles[item.status.toLowerCase()]]}>{item.status}</Text>
+            </View>
 
             <View style={styles.infoRow}>
-              <MaterialCommunityIcons name="calendar" size={16} color="#666" />
+              <MaterialCommunityIcons name="calendar" size={14} color="#888" />
               <Text style={styles.details}>{item.date}</Text>
             </View>
 
             <View style={styles.infoRow}>
-              <MaterialCommunityIcons name="clock-time-four-outline" size={16} color="#666" />
+              <MaterialCommunityIcons name="clock-outline" size={14} color="#888" />
               <Text style={styles.details}>{item.time}</Text>
-            </View>
-
-            <Text style={[styles.status, styles[item.status.toLowerCase()]]}>
-              {item.status}
-            </Text>
-
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.rescheduleButton}>
-                <MaterialCommunityIcons name="calendar-refresh" size={16} color="#FFF" />
-                <Text style={styles.buttonText}>Reschedule</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.cancelButton}>
-                <MaterialCommunityIcons name="close-circle" size={16} color="#FFF" />
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -55,33 +51,54 @@ const AppointmentsPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
-    padding: 16,
+    backgroundColor: "#F9FAFB",
   },
-  heading: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 16,
-    color: "#333",
-  },
+  
   listContainer: {
     paddingBottom: 20,
+    marginTop: 10,
   },
   card: {
     backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
+    padding: 14,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 10,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
-  customer: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#222",
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 6,
+  },
+  customer: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#222",
+  },
+  status: {
+    fontSize: 12,
+    fontWeight: "600",
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+    textTransform: "capitalize",
+  },
+  confirmed: {
+    backgroundColor: "#E3FCEC",
+    color: "#146C43",
+  },
+  pending: {
+    backgroundColor: "#FFF4D4",
+    color: "#8D6A00",
+  },
+  completed: {
+    backgroundColor: "#D9F2FB",
+    color: "#0D5D7C",
   },
   infoRow: {
     flexDirection: "row",
@@ -90,57 +107,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   details: {
-    fontSize: 14,
-    color: "#666",
-  },
-  status: {
-    fontSize: 14,
-    fontWeight: "bold",
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    alignSelf: "flex-start",
-    marginTop: 6,
-  },
-  confirmed: {
-    backgroundColor: "#D4EDDA",
-    color: "#155724",
-  },
-  pending: {
-    backgroundColor: "#FFF3CD",
-    color: "#856404",
-  },
-  completed: {
-    backgroundColor: "#D1ECF1",
-    color: "#0C5460",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 12,
-  },
-  rescheduleButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#007BFF",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    gap: 6,
-  },
-  cancelButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#DC3545",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    gap: 6,
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 14,
-    fontWeight: "bold",
+    fontSize: 13,
+    color: "#555",
   },
 });
 

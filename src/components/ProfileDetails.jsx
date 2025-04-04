@@ -18,6 +18,8 @@ const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields
   const [editMode, setEditMode] = useState(false);
 
   return (
+
+    
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
       <Header navigation={navigation} name="Profile Data" />

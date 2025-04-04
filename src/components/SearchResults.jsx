@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { 
-  View, Text, FlatList, Image, TouchableOpacity, ActivityIndicator, StyleSheet 
+import {
+  View, Text, FlatList, Image, TouchableOpacity, ActivityIndicator, StyleSheet, Platform
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import RNPickerSelect from "react-native-picker-select";
+import Header from "./Header";
 
 const SearchResults = ({ route }) => {
   const navigation = useNavigation();
@@ -13,10 +14,8 @@ const SearchResults = ({ route }) => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedService, setSelectedService] = useState("");
 
-  // Extract parameters from route
   const { name = "", location = "", service = "" } = route.params || {};
 
-  // Location and Service Options
   const locationOptions = [
     { label: "Delhi", value: "delhi" },
     { label: "Mumbai", value: "mumbai" },
@@ -37,32 +36,7 @@ const SearchResults = ({ route }) => {
           `http://146.235.231.5:3000/tailor-management/search?name=${name}&location=${selectedLocation || location}&service=${selectedService || service}`
         );
         const data = await response.json();
-        setTailors([
-          {
-            tailorId: 1,
-            fullName: "James Tailor",
-            location: "New York, USA",
-            image: "https://images.pexels.com/photos/3738088/pexels-photo-3738088.jpeg?auto=compress&cs=tinysrgb&w=600",
-          },
-          {
-            tailorId: 2,
-            fullName: "Sophie Johnson",
-            location: "London, UK",
-            image: "https://images.pexels.com/photos/4621904/pexels-photo-4621904.jpeg?auto=compress&cs=tinysrgb&w=600",
-          },
-          {
-            tailorId: 3,
-            fullName: "Rahul Singh",
-            location: "Mumbai, India",
-            image: "https://images.pexels.com/photos/4621904/pexels-photo-4621904.jpeg?auto=compress&cs=tinysrgb&w=600",
-          },
-          {
-            tailorId: 4,
-            fullName: "Emily Brown",
-            location: "Sydney, Australia",
-            image: "https://images.pexels.com/photos/4621904/pexels-photo-4621904.jpeg?auto=compress&cs=tinysrgb&w=600",
-          },
-        ]);
+        setTailors(data);
       } catch (error) {
         console.error("Error fetching tailors:", error);
       } finally {
@@ -75,63 +49,68 @@ const SearchResults = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Icon name="arrow-back" size={26} color="black" />
-      </TouchableOpacity>
+      <Header
+      navigation={navigation}
+      name= "Search Results"
+      />
 
       {/* Filters */}
-      <View style={styles.filterContainer}>
-        <View style={styles.dropdownWrapper}>
+      <View style={styles.filters}>
+        <View style={styles.dropdownContainer}>
           <Text style={styles.label}>Location</Text>
           <RNPickerSelect
             placeholder={{ label: "Select Location", value: null }}
             items={locationOptions}
-            onValueChange={(value) => setSelectedLocation(value)}
+            onValueChange={(value) => {
+              setSelectedLocation(value)
+              setLoading(true)
+            }}
             style={pickerSelectStyles}
             useNativeAndroidPickerStyle={false}
-            Icon={() => <Icon name="chevron-down" size={20} color="gray" style={styles.icon} />}
+            Icon={() => <Icon name="chevron-down" size={18} color="#555" />}
           />
         </View>
 
-        <View style={styles.dropdownWrapper}>
+        <View style={styles.dropdownContainer}>
           <Text style={styles.label}>Service</Text>
           <RNPickerSelect
             placeholder={{ label: "Select Service", value: null }}
             items={serviceOptions}
-            onValueChange={(value) => setSelectedService(value)}
+            onValueChange={(value) => {
+              setSelectedService(value)
+              setLoading(true)
+            }}
             style={pickerSelectStyles}
             useNativeAndroidPickerStyle={false}
-            Icon={() => <Icon name="chevron-down" size={20} color="gray" style={styles.icon} />}
+            Icon={() => <Icon name="chevron-down" size={18} color="#555" />}
           />
         </View>
       </View>
 
+      {/* Results */}
       {loading ? (
-        <ActivityIndicator size="large" color="#6200ee" style={styles.loader} />
+        <ActivityIndicator size="large" color="#007AFF" style={styles.loader} />
       ) : tailors.length === 0 ? (
         <View style={styles.noResultsContainer}>
-          <Text style={styles.noResultsText}>No tailors found</Text>
+          <Text style={styles.noResultsText}>No tailors found.</Text>
         </View>
       ) : (
         <FlatList
           data={tailors}
           keyExtractor={(item) => item.tailorId.toString()}
-          contentContainerStyle={styles.flatListContainer}
+          contentContainerStyle={styles.list}
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <Image source={{ uri: item.image }} style={styles.image} />
-
-              <View style={styles.infoContainer}>
+              {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
+              <View style={styles.cardContent}>
                 <Text style={styles.name}>{item.fullName}</Text>
                 <Text style={styles.location}>{item.location}</Text>
               </View>
-
               <TouchableOpacity
-                style={styles.button}
+                style={styles.viewButton}
                 onPress={() => navigation.navigate("TailorProfile", { id: item.tailorId })}
               >
-                <Text style={styles.buttonText}>View Profile</Text>
+                <Text style={styles.viewButtonText}>View Profile</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -141,40 +120,25 @@ const SearchResults = ({ route }) => {
   );
 };
 
-// ✨ Improved Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    backgroundColor: "#F9FAFC",
+    backgroundColor: "#F4F7FE",
   },
-  backButton: {
-    position: "absolute",
-    top: 16,
-    left: 16,
-    padding: 8,
-    zIndex: 10,
-  },
-  filterContainer: {
+  filters: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 60,
-    marginBottom: 10,
+    marginVertical: 16,
+    paddingHorizontal: 15,
   },
-  dropdownWrapper: {
+  dropdownContainer: {
     width: "48%",
   },
   label: {
-    fontSize: 14,
-    fontWeight: "500",
-    marginBottom: 4,
-    color: "#444",
-  },
-  icon: {
-    position: "absolute",
-    right: 10,
-    top: "50%",
-    transform: [{ translateY: -10 }],
+    fontSize: 13,
+    fontWeight: "600",
+    marginBottom: 6,
+    color: "#555",
   },
   loader: {
     flex: 1,
@@ -187,67 +151,91 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noResultsText: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#777",
+    fontSize: 16,
+    color: "#888",
+    fontWeight: "500",
   },
-  flatListContainer: {
-    paddingBottom: 20,
+  list: {
+    paddingBottom: 30,
   },
   card: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 16,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
-    padding: 14,
-    borderRadius: 16,
-    marginBottom: 12,
+    marginBottom: 14,
     shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 4,
-    width: "100%",
-    gap: 14,
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 8,
+    elevation: 3,
+    MarginHorizontal: 15,
   },
   image: {
-    width: 55,
-    height: 55,
-    borderRadius: 50,
-    borderWidth: 1.5,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 14,
+    borderWidth: 2,
     borderColor: "#ddd",
   },
-  infoContainer: {
+  cardContent: {
     flex: 1,
-    gap: 2,
   },
   name: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#222",
+    color: "#333",
+    marginBottom: 3,
   },
   location: {
-    color: "#666",
     fontSize: 13,
+    color: "#777",
   },
-  button: {
+  viewButton: {
     backgroundColor: "#007AFF",
     paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 10,
+    paddingHorizontal: 14,
+    borderRadius: 12,
     shadowColor: "#007AFF",
     shadowOpacity: 0.3,
-    shadowRadius: 5,
+    shadowRadius: 6,
     elevation: 2,
   },
-  buttonText: {
-    color: "white",
+  viewButtonText: {
+    color: "#fff",
     fontSize: 13,
     fontWeight: "600",
   },
 });
 
 const pickerSelectStyles = {
-  inputIOS: { backgroundColor: "#fff", padding: 10, borderRadius: 8 },
-  inputAndroid: { backgroundColor: "#fff", padding: 10, borderRadius: 8 },
+  inputIOS: {
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 13,
+    paddingRight: 30,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    shadowColor: "#ccc",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  inputAndroid: {
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 13,
+    paddingRight: 30,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  iconContainer: {
+    top: 18,
+    right: 10,
+  },
 };
 
 export default SearchResults;

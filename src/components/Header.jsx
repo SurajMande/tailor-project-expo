@@ -6,7 +6,7 @@ const Header = ({navigation, name}) => {
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                <Icon name="arrow-left" size={20} color="black" />
+                <Icon name="arrow-left" size={20} color="white" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>{name}</Text>
         </View>

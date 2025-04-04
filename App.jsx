@@ -18,6 +18,7 @@ import TailorProfileDetails from "./src/components/TailorProfileDetails";
 // import OfflineOrderManagement from "./src/components/OfflineOrderManagement";
 import SearchResults from "./src/components/SearchResults";
 import AppointmentsPage from "./src/components/AppointmentPage";
+import HelpNSupport from "./src/components/HelpNSupport";
 
 // Create Stack Navigator
 const Stack = createStackNavigator();
@@ -61,7 +62,7 @@ function BottomTabs() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="TailorManagement" component={TailorManagement} />
-      <Tab.Screen name="Account" component={TailorProfileDetails} />
+      <Tab.Screen name="Account" component={HelpNSupport} />
       {/* <Tab.Screen name="Account" component={OfflineOrderManagement} /> */}
     </Tab.Navigator>
   );
@@ -82,6 +83,7 @@ export default function App() {
         <Stack.Screen name="TailorManagement" component={TailorManagement} />
         <Stack.Screen name="CustomerManagement" component={CustomerManagement} />
         <Stack.Screen name="AppointmentsPage" component={AppointmentsPage} />
+        <Stack.Screen name="HelpNSupport" component={HelpNSupport} />
         {/* <Stack.Screen name="OfflineOrderManagement" component={OfflineOrderManagement} /> */}
       </Stack.Navigator>
     </NavigationContainer>

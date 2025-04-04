@@ -23,9 +23,9 @@ const NavBar = () => {
 
       {/* Right Section - Three-Line Menu */}
       <TouchableOpacity 
-      onPress={()=> navigation.navigate('AppointmentsPage')}
+      onPress={()=> navigation.navigate('HelpNSupport')}
       >
-        <MenuIcon name="bell" size={28} color="black" />
+        <Icon name="help" size={28} color="blue" />
       </TouchableOpacity>
     </View>
   );
