@@ -1,31 +1,23 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import MenuIcon from 'react-native-vector-icons/Feather';
-import DropdownIcon from 'react-native-vector-icons/MaterialCommunityIcons'; // Importing a better dropdown icon
+import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'; // Better icon set
 import { useNavigation } from '@react-navigation/native';
 
 const NavBar = () => {
-
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <View style={styles.navbar}>
-      {/* Left Section - Location */}
-      <TouchableOpacity style={styles.locationContainer}>
-        <Text style={styles.locationLabel}>Location</Text>
-        <View style={styles.locationInfo}>
-          <Icon name="map-marker-alt" size={20} color="blue" />
-          <Text style={styles.locationText}> New York, USA</Text>
-          <DropdownIcon name="chevron-down" size={22} color="black" style={styles.dropdownIcon} />
-        </View>
-      </TouchableOpacity>
+      {/* Left Side - Logo */}
+      <Image
+        source={require('../assets/images/logo.png')} // Replace with your logo path
+        style={styles.logo}
+        resizeMode="contain"
+      />
 
-      {/* Right Section - Three-Line Menu */}
-      <TouchableOpacity 
-      onPress={()=> navigation.navigate('HelpNSupport')}
-      >
-        <Icon name="help" size={28} color="blue" />
+      {/* Right Side - Help Icon */}
+      <TouchableOpacity onPress={() => navigation.navigate('OfflineOrderManagement')}>
+        <Icon name="help-circle-outline" size={28} color="blue" />
       </TouchableOpacity>
     </View>
   );
@@ -40,32 +32,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 10,
   },
-  locationContainer: {
-    flexDirection: 'column',
-  },
-  locationLabel: {
-    fontSize: 14,
-    color: 'gray',
-  },
-  locationInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  locationText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginLeft: 5,
-  },
-  dropdownIcon: {
-    marginLeft: 5, // Adjust spacing for a cleaner look
-  },
-  underline: {
-    width: 70, // Adjust width as needed
-    height: 1,
-    backgroundColor: 'red',
-    marginTop: 10,
-    borderRadius: 2,
+  logo: {
+    width: 120,
+    height: 40,
   },
 });
 

@@ -14,12 +14,17 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Picker } from "@react-native-picker/picker";
 import Header from "./Header";
 
-const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields }) => {
+const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields, handleSave }) => {
   const [editMode, setEditMode] = useState(false);
 
-  return (
+  const toggleEditMode = () => {
+    if (editMode && handleSave) {
+      handleSave(userData); // Call the save API when turning off edit mode
+    }
+    setEditMode(!editMode);
+  };
 
-    
+  return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
       <Header navigation={navigation} name="Profile Data" />
@@ -27,12 +32,12 @@ const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields
       <ScrollView contentContainerStyle={styles.container}>
         {/* Profile Image & Name */}
         <View style={styles.profileContainer}>
-          <Image
+          {/* <Image
             source={{
               uri: "https://images.pexels.com/photos/3738101/pexels-photo-3738101.jpeg?auto=compress&cs=tinysrgb&w=600",
             }}
             style={styles.profileImage}
-          />
+          /> */}
           <Text style={styles.name}>{userData.fullName}</Text>
           <Text style={styles.role}>{userData.businessName || profileType}</Text>
         </View>
@@ -103,7 +108,7 @@ const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields
           )}
 
           {/* Buttons */}
-          <TouchableOpacity style={styles.editButton} onPress={() => setEditMode(!editMode)}>
+          <TouchableOpacity style={styles.editButton} onPress={toggleEditMode}>
             <Text style={styles.buttonText}>{editMode ? "Save Changes" : "Edit Profile"}</Text>
           </TouchableOpacity>
         </View>

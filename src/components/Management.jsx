@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Header from "./Header";
@@ -30,11 +31,13 @@ const Management = ({ user, menuSections }) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} 
+    behavior={Platform.OS === "ios" ? "padding" : "height"} 
+    >
       {/* Header */}
       <Header 
       navigation={navigation} 
-      name={`${user.name} Management`} 
+      name={`${user.accountType} Management`} 
       />
 
       {/* User Profile Section */}

@@ -13,7 +13,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome5";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
-// import { login } from "../services/authService";
+import { login } from "../services/authService";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -27,28 +27,30 @@ const Login = () => {
       return;
     }
 
-    // setLoading(true);
-    // const result = await login(formData);
-    // setLoading(false);
+    setLoading(true);
+    const result = await login(formData);
+    setLoading(false);
 
-    // if (result.success) {
+    if (result.success) {
 
-    //   // if (result.accountType === "Tailor") {
-    //   //   navigation.navigate("TailorManagement", { userId: result.id });
-    //   // } else {
-    //   //   navigation.navigate("CustomerManagement", { userId: result.id });
-    //   // }
+      if (result.accountType === "Tailor") {
+        navigation.navigate("TailorManagement", { userId: result.id });
+      } else {
+        navigation.navigate("CustomerManagement", { userId: result.id });
+      }
 
-    //   navigation.navigate('MainTabs');
+      // navigation.navigate('MainTabs');
 
-    //   Toast.show({ type: "success", text1: "Success", text2: "Login Successful!" });
-    // } else {
-    //   Toast.show({ type: "error", text1: "Login Failed", text2: result.message || "Invalid credentials" });
-    // }
+      Toast.show({ type: "success", text1: "Success", text2: "Login Successful!" });
+    } else {
+      Toast.show({ type: "error", text1: "Login Failed", text2: result.message || "Invalid credentials" });
+    }
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
+    <KeyboardAvoidingView 
+    // behavior={Platform.OS === "ios" ? "padding" : "height"} 
+    style={styles.container}>
       <Text style={styles.title}>Welcome Back!</Text>
 
       {/* Email Input */}

@@ -96,8 +96,8 @@ const SignUp = ({ navigation }) => {
 
     try {
       const url = filteredFormData.accountType === "Tailor"
-        ? 'http://146.235.231.5:3000/auth/signup/tailor'
-        : 'http://146.235.231.5:3000/auth/signup/customer';
+        ? 'http://localhost:3000/auth/signup/tailor'
+        : 'http://localhost:3000/auth/signup/customer';
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -140,7 +140,7 @@ const SignUp = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        // behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardAvoiding}
       >
         <ScrollView contentContainerStyle={styles.container}>
@@ -266,7 +266,7 @@ const SignUp = ({ navigation }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      <Toast
+      {/* <Toast
         position="top"
         visibilityTime={2000}
         autoHide
@@ -279,7 +279,8 @@ const SignUp = ({ navigation }) => {
             <ToastMessage {...props} backgroundColor="#D32F2F" />
           ),
         }}
-      />
+      /> */}
+      <Toast/>
 
     </SafeAreaView>
   );

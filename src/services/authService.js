@@ -7,7 +7,7 @@ import { saveUserData, getUserData, removeUserData } from "./storageService";
  */
 export const login = async (formData) => {
   try {
-    const response = await fetch("http://146.235.231.5:3000/auth/login", {
+    const response = await fetch("http://192.168.152.176:3000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -36,13 +36,14 @@ export const fetchProtectedData = async () => {
   if (!userData) return;
 
   try {
-    const response = await fetch("https://your-api.com/protected", {
+    const response = await fetch(`http://192.168.152.176:3000/${userData.accountType}-management/profile/${userData.id}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${userData.token}` },
     });
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
+    return data;
   } catch (error) {
     console.error("Error fetching protected data:", error);
   }
