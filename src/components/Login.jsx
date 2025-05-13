@@ -32,16 +32,15 @@ const Login = () => {
     setLoading(false);
 
     if (result.success) {
-
-      if (result.accountType === "Tailor") {
-        navigation.navigate("TailorManagement", { userId: result.id });
-      } else {
-        navigation.navigate("CustomerManagement", { userId: result.id });
-      }
-
-      // navigation.navigate('MainTabs');
-
       Toast.show({ type: "success", text1: "Success", text2: "Login Successful!" });
+      // if (result.accountType === "Tailor") {
+      //   navigation.navigate("TailorManagement", { userId: result.id });
+      // } else {
+      //   navigation.navigate("CustomerManagement", { userId: result.id });
+      // }
+      setTimeout(() => {
+        navigation.navigate("MainTabs");
+      },1500);
     } else {
       Toast.show({ type: "error", text1: "Login Failed", text2: result.message || "Invalid credentials" });
     }
@@ -85,13 +84,13 @@ const Login = () => {
       </TouchableOpacity>
 
       {/* OR Separator */}
-      <Text style={styles.orText}>Or</Text>
+      {/* <Text style={styles.orText}>Or</Text>
 
       {/* Google Login Button */}
-      <TouchableOpacity style={styles.googleButton}>
+      {/* <TouchableOpacity style={styles.googleButton}>
         <Icon name="google" size={18} color="#DB4437" style={styles.googleIcon} />
         <Text style={styles.googleText}>Log In with Google</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>  */}
 
       {/* Sign Up Link */}
       <Text style={styles.signupText}>

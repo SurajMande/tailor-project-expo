@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import {API_BASE_URL} from "@env";
+import { Image } from 'react-native';
 
 const RecommendationComponent = () => {
   const [tailors, setTailors] = useState([]);
@@ -13,7 +15,7 @@ const RecommendationComponent = () => {
   useEffect(() => {
     const fetchTailors = async () => {
       try {
-        const response = await fetch(`http://146.235.231.5:3000/tailor-management/search?service=${selectedCategory}`);
+        const response = await fetch(`${API_BASE_URL}/tailor-management/search?service=${selectedCategory}`);
         const data = await response.json();
         setTailors(data);
       } catch (error) {
@@ -79,7 +81,7 @@ const RecommendationComponent = () => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
+            <Image source={{ uri: item.profileImage }} style={styles.image} />
             <View style={styles.cardContent}>
               <Text style={styles.serviceTitle}>{item.fullName}</Text>
               <Text style={styles.specialization}>{item.specialization}</Text>

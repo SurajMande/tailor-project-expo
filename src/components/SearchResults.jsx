@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import RNPickerSelect from "react-native-picker-select";
 import Header from "./Header";
+import {API_BASE_URL} from "@env";
 
 const SearchResults = ({ route }) => {
   const navigation = useNavigation();
@@ -33,7 +34,7 @@ const SearchResults = ({ route }) => {
     const fetchTailors = async () => {
       try {
         const response = await fetch(
-          `http://146.235.231.5:3000/tailor-management/search?name=${name}&location=${selectedLocation || location}&service=${selectedService || service}`
+          `${API_BASE_URL}/tailor-management/search?name=${name}&location=${selectedLocation || location}&service=${selectedService || service}`
         );
         const data = await response.json();
         setTailors(data);

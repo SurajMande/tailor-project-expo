@@ -12,11 +12,11 @@ const NavBar = () => {
       <Image
         source={require('../assets/images/logo.png')} // Replace with your logo path
         style={styles.logo}
-        resizeMode="contain"
+        // resizeMode="contain"
       />
 
       {/* Right Side - Help Icon */}
-      <TouchableOpacity onPress={() => navigation.navigate('OfflineOrderManagement')}>
+      <TouchableOpacity onPress={() => navigation.navigate('HelpNSupport')}>
         <Icon name="help-circle-outline" size={28} color="blue" />
       </TouchableOpacity>
     </View>
@@ -28,13 +28,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginBottom: 10,
+    paddingRight: 10,
+    paddingVertical: 2,
   },
   logo: {
-    width: 120,
-    height: 40,
+    transform: 'translateX(-25px)',
+    width: 180,
+    height: 90,
   },
 });
 

@@ -10,15 +10,23 @@ import {
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Header from "./Header";
 import { useNavigation } from "@react-navigation/native";
+import { logoutUser } from "../services/authService"
 
 const Management = ({ user, menuSections }) => {
 
   const navigation = useNavigation();
+  const handleLogout = async () => {
+    await logoutUser();
+    navigation.navigate('MainTabs')
+  }
 
   const renderMenuItem = ({ item }) => (
     <TouchableOpacity 
     style={styles.menuItem} activeOpacity={0.7}
-    onPress={() => navigation.navigate(item.path)} // Navigate to specified path
+    onPress={() => {
+      (item.isLogout) ? handleLogout() :  navigation.navigate(item.path)
+      
+    }} // Navigate to specified path
     >
       <View style={styles.iconContainer}>
         <Icon name={item.icon} size={22} color="#6C63FF" />
@@ -52,7 +60,7 @@ const Management = ({ user, menuSections }) => {
         <View style={styles.infoRow}>
           <View style={styles.infoBox}>
             <Icon name="map-marker" size={18} color="#6C63FF" />
-            <Text style={styles.infoText}>Damascus</Text>
+            <Text style={styles.infoText}>Location</Text>
           </View>
           <View style={styles.infoBox}>
             <Icon name="web" size={18} color="#6C63FF" />

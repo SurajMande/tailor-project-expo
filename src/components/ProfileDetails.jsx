@@ -8,41 +8,108 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Picker } from "@react-native-picker/picker";
+import { launchImageLibrary } from "react-native-image-picker";
+import axios from "axios";  // Import axios for API calls
 import Header from "./Header";
 
 const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields, handleSave }) => {
   const [editMode, setEditMode] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  // Function to pick image
+  const pickImage = async () => {
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: true,  // Set to true for base64 image data
+    });
+
+    if (result.didCancel) {
+      console.log('User canceled image picker');
+      return;
+    }
+
+    if (result.assets && result.assets[0].uri) {
+      setUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("image", {
+          uri: result.assets[0].uri,
+          name: `profile_${userData.id}.jpg`,
+          type: 'image/jpeg',
+        });
+
+        // Make API call to Imgur
+        const response = await axios.post(
+          "https://api.imgur.com/3/image",
+          formData,
+          {
+            headers: {
+              Authorization: `2d777b13fcad397`, // Replace with your Imgur Client ID
+            },
+          }
+        );
+
+        // Get the image URL from the response
+        const imageUrl = response.data.data.link;
+
+        setUserData({ ...userData, profileImage: imageUrl });
+      } catch (error) {
+        console.error("Image upload error:", error);
+        alert("Failed to upload image");
+      } finally {
+        setUploading(false);
+      }
+    }
+  };
 
   const toggleEditMode = () => {
     if (editMode && handleSave) {
-      handleSave(userData); // Call the save API when turning off edit mode
+      handleSave(userData); // Call the save API with updated data including image URL
     }
     setEditMode(!editMode);
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Header */}
       <Header navigation={navigation} name="Profile Data" />
 
       <ScrollView contentContainerStyle={styles.container}>
-        {/* Profile Image & Name */}
         <View style={styles.profileContainer}>
-          {/* <Image
-            source={{
-              uri: "https://images.pexels.com/photos/3738101/pexels-photo-3738101.jpeg?auto=compress&cs=tinysrgb&w=600",
-            }}
-            style={styles.profileImage}
-          /> */}
+          {userData.profileImage ? (
+            <Image
+              source={{ uri: userData.profileImage }}
+              style={styles.profileImage}
+            />
+          ) : (
+            <View style={styles.noImageContainer}>
+              <Text style={styles.noImageText}>No Image Added</Text>
+            </View>
+          )}
+
+          {editMode && (
+            <TouchableOpacity 
+              style={styles.uploadButton} 
+              onPress={pickImage}
+              disabled={uploading}
+            >
+              {uploading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.uploadButtonText}>Upload Image</Text>
+              )}
+            </TouchableOpacity>
+          )}
+
           <Text style={styles.name}>{userData.fullName}</Text>
           <Text style={styles.role}>{userData.businessName || profileType}</Text>
         </View>
 
-        {/* Profile Details */}
         <View style={styles.detailsContainer}>
           {fields.map(({ icon, field, label }) => (
             <View key={field} style={styles.inputContainer}>
@@ -62,7 +129,6 @@ const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields
             </View>
           ))}
 
-          {/* Tailor-Specific Fields */}
           {profileType === "Tailor" && (
             <>
               <View style={styles.inputContainer}>
@@ -107,7 +173,6 @@ const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields
             </>
           )}
 
-          {/* Buttons */}
           <TouchableOpacity style={styles.editButton} onPress={toggleEditMode}>
             <Text style={styles.buttonText}>{editMode ? "Save Changes" : "Edit Profile"}</Text>
           </TouchableOpacity>
@@ -117,7 +182,6 @@ const ProfileDetails = ({ navigation, userData, setUserData, profileType, fields
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -141,6 +205,28 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
+  },
+  noImageContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#eee",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noImageText: {
+    color: "#666",
+    fontSize: 14,
+  },
+  uploadButton: {
+    backgroundColor: "#4CAF50",
+    padding: 8,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  uploadButtonText: {
+    color: "#fff",
+    fontSize: 14,
   },
   name: {
     fontSize: 22,

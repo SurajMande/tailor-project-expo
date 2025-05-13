@@ -1,4 +1,5 @@
 import { saveUserData, getUserData, removeUserData } from "./storageService";
+import { API_BASE_URL } from "@env"; // Import API base URL from config
 
 /**
  * User login - Fetch token and store user data
@@ -7,7 +8,7 @@ import { saveUserData, getUserData, removeUserData } from "./storageService";
  */
 export const login = async (formData) => {
   try {
-    const response = await fetch("http://192.168.152.176:3000/auth/login", {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -36,7 +37,7 @@ export const fetchProtectedData = async () => {
   if (!userData) return;
 
   try {
-    const response = await fetch(`http://192.168.152.176:3000/${userData.accountType}-management/profile/${userData.id}`, {
+    const response = await fetch(`${API_BASE_URL}/${userData.accountType}-management/profile/${userData.id}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${userData.token}` },
     });

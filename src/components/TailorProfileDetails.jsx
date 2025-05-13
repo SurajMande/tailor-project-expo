@@ -6,11 +6,16 @@ import Toast from "react-native-toast-message";
 import ToastMessage from "./ToastMessage";
 import { fetchProtectedData } from "../services/authService";
 import { getUserData } from "../services/storageService";
+import { API_BASE_URL } from "@env"; // Import API base URL from config
+
+// Use environment variables for API base URL
 
 const TailorProfileDetails = () => {
   const navigation = useNavigation();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null); // Store user ID in state
+  const [saveCall, setSaveCall] = useState(true);
 
   const fields = [
     { icon: "person", field: "fullName", label: "Full Name" },
@@ -19,65 +24,71 @@ const TailorProfileDetails = () => {
     { icon: "location-on", field: "location", label: "Location" },
     { icon: "description", field: "description", label: "Description" },
   ];
-  const getDetails = async ()=>{
-    try{
-    const data = await fetchProtectedData();
-    setUserData(data);
-    const user = await getUserData();
-    const id = user.id;
-    } catch (error) {
-          console.error("Failed to fetch profile data:", error);
-        } finally {
-          setLoading(false);
+  const getDetails = async () => {
+      try {
+        const data = await fetchProtectedData();
+        setUserData(data);
+        const user = await getUserData();
+        setUserId(user.id); // Store ID for use in handleSave
+      } catch (error) {
+        console.error("Failed to fetch profile data:", error);
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Failed to load profile data. Please try again.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    useEffect(() => {
+      getDetails();
+    }, [saveCall]);
+  
+    const handleSave = async (updatedData) => {
+      if (!userId) {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "User ID not found. Please try again.",
+        });
+        return;
+      }
+      console.log("called")
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/tailor-management/update-profile/${userId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error("Failed to update profile");
         }
-  }
-  useEffect(() => {
-    // const fetchProfile = async () => {
-    //   try {
-    //     // Replace this with your actual API endpoint
-    //     const response = await fetch(`http://192.168.152.176:3000/tailor-management/profile/${id}`);
-    //     const data = await response.json();
-    //     setUserData(data);
-    //   } catch (error) {
-    //     console.error("Failed to fetch profile data:", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-
-    // fetchProfile();
-    getDetails();
-  }, []);
-
   
-  const handleSave = async (updatedData) => {
-    try {
-      const response = await fetch(`http://146.235.231.5:3000/tailor-management/update-profile/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
-  
-      const result = await response.json();
-      console.log("Save success:", result);
-  
-      Toast.show({
-        type: "success",
-        text1: "Profile Updated",
-        text2: "Your changes have been saved.",
-      });
-    } catch (error) {
-      console.error("Error saving profile:", error);
-  
-      Toast.show({
-        type: "error",
-        text1: "Update Failed",
-        text2: "Something went wrong while saving.",
-      });
-    }
-  };
+        const result = await response.json();
+        setUserData(result); // Update local state with new data
+        Toast.show({
+          type: "success",
+          text1: "Profile Updated",
+          text2: "Your changes have been saved.",
+        });
+        setSaveCall(!saveCall);
+      } catch (error) {
+        console.error("Error saving profile:", error);
+        Toast.show({
+          type: "error",
+          text1: "Update Failed",
+          text2: error.message || "Something went wrong while saving.",
+        });
+      }
+    };
 
   if (loading) {
     return (

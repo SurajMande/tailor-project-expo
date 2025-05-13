@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getUserData } from "../services/storageService";
+import Header from './Header';
 
-const NotLoggedIn = () => {
+const IsLoggedIn = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -28,15 +29,19 @@ const NotLoggedIn = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.goBackIcon}>
-                    <Text style={styles.goBackText}>←</Text>
-                </TouchableOpacity>
-                <Text style={styles.title}>Not Logged In</Text>
-            </View>
+            <Header 
+            navigation={navigation}
+            name= "Not Logged In"
+            />
             <View style={styles.content}>
                 <Text style={styles.message}>You are not signed in.</Text>
-                <Button title="Login" onPress={handleLogin} />
+                <TouchableOpacity onPress={handleLogin}>
+                    <Text style={styles.button}>Login</Text>
+                </TouchableOpacity>
+                <Text style={styles.message}>or</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                    <Text style={styles.button}>Sign Up</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -45,24 +50,7 @@ const NotLoggedIn = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
         backgroundColor: '#fff',
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 16,
-    },
-    goBackIcon: {
-        marginRight: 8,
-    },
-    goBackText: {
-        fontSize: 18,
-        color: '#007AFF',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
     },
     content: {
         flex: 1,
@@ -73,6 +61,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 16,
     },
+    button: {
+        backgroundColor: '#003BFF',
+        color: '#fff',
+        padding: 10,
+        paddingHorizontal: 15,
+        borderRadius: 5,
+        fontSize: 16,
+        fontWeight: 'semibold',
+    },
 });
 
-export default NotLoggedIn;
+export default IsLoggedIn;
